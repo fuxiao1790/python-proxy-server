@@ -2,6 +2,8 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 from socketserver import ThreadingMixIn
 import requests
 
+cache = dict()
+
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == '/favicon.ico':
@@ -28,10 +30,16 @@ class Handler(BaseHTTPRequestHandler):
             self.wfile.write('404 not found'.encode())
 
     def handle_regular_req(self):
+        if self.path in cache: 
+            res = cache[self.path]
+            self.respond(res)
+            return
+
         res = requests.get(
             url='https://' + self.path[1:], 
             headers=self.create_header(),
         )
+        cache[self.path] = res
         self.respond(res)
             
     def create_header(self): 
