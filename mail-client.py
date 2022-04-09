@@ -11,7 +11,7 @@ msg = EmailMessage()
 msg["From"] = SENDER_EMAIL
 msg["To"] = RECEIVER_EMAIL
 msg["Subject"] = "Test"
-msg.set_content = "THIS IS A TEST"
+msg.set_content("THIS IS A TEST")
 
 client = smtplib.SMTP(SMTP_SERVER_ADDR, SMTP_SERVER_PORT)
 client.ehlo()
