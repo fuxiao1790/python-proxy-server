@@ -1,22 +1,27 @@
 import smtplib
 from email.message import EmailMessage
+from getpass import getpass
 
-SMTP_SERVER_ADDR = "smtp.gmail.com"
-SMTP_SERVER_PORT = 587
-SENDER_EMAIL = ""
-SENDER_PASSWORD = ""
-RECEIVER_EMAIL = ""
+addr = input("SMTP Server: ")
+port = input("SMTP Server Port: ")
+username = input("SMTP Server Username: ")
+password = getpass("SMTP Server Password: ")
+
+client = smtplib.SMTP(addr, port)
+client.ehlo() 
+client.starttls()
+client.login(username, password)
+
+email_from = input("From: ")
+email_to = input("To: ")
+email_subject = input("Subject: ")
+email_content = input("Email Content: ")
 
 msg = EmailMessage()
-msg["From"] = SENDER_EMAIL
-msg["To"] = RECEIVER_EMAIL
-msg["Subject"] = "Test"
-msg.set_content("THIS IS A TEST")
-
-client = smtplib.SMTP(SMTP_SERVER_ADDR, SMTP_SERVER_PORT)
-client.ehlo()
-client.starttls()
-client.login(SENDER_EMAIL, SENDER_PASSWORD)
+msg["From"] = email_from
+msg["To"] = email_to
+msg["Subject"] = email_subject
+msg.set_content(email_content)
 
 client.send_message(msg)
 client.quit()
